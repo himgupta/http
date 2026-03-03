@@ -210,7 +210,8 @@ class CronetEngine {
 
   /// Starts NetLog logging to a file.
   ///
-  /// The [fileName] argument specifies the path to the file where the log will be written.
+  /// The [fileName] argument specifies the path to the file where the log will
+  /// be written.
   /// The [logAll] argument specifies whether to log all events.
   ///
   /// This method corresponds to `CronetEngine.startNetLogToFile`.
@@ -222,10 +223,6 @@ class CronetEngine {
   }
 
   /// Stops NetLog logging.
-  ///
-  /// This method corresponds to [CronetEngine.stopNetLog].
-  ///
-  /// See https://developer.android.com/reference/org/chromium/net/CronetEngine#stopNetLog()
   void stopNetLog() {
     _engine.stopNetLog();
   }
