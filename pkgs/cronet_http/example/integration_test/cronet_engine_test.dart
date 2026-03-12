@@ -234,6 +234,26 @@ void testEngineClose() {
   });
 }
 
+void testPublicKeyPins() {
+  group('publicKeyPins', () {
+    test('valid pin configuration', () {
+      CronetEngine.build(
+        publicKeyPins: [
+          PublicKeyPin(
+            host: 'example.com',
+            pinsSha256: {
+              List.filled(32, 0), // Fake hash, but correctly sized (32 bytes)
+            },
+            includeSubdomains: true,
+            expirationDate: DateTime.now().add(const Duration(days: 30)),
+          ),
+        ],
+      ).close();
+      expect(true, isTrue); // If we get here without throwing, it succeeded.
+    });
+  });
+}
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -243,4 +263,5 @@ void main() {
   testQuicHints();
   testNetLog();
   testEngineClose();
+  testPublicKeyPins();
 }
