@@ -12,6 +12,7 @@ output:
 classes:
   - 'io.flutter.plugins.cronet_http.UrlRequestCallbackProxy'
   - 'java.net.URL'
+  - 'java.util.Date'
   - 'java.util.concurrent.Executors'
   - 'org.chromium.net.CronetEngine'
   - 'org.chromium.net.CronetException'
