@@ -243,14 +243,15 @@ class CronetEngine {
 
 Map<String, String> _cronetToClientHeaders(
   JMap<JString?, JList<JString?>?> cronetHeaders,
-) => cronetHeaders.map((key, value) {
-  final entry = MapEntry(
-    key!.toDartString(releaseOriginal: true).toLowerCase(),
-    value!.join(','),
-  );
-  value.release();
-  return entry;
-});
+) =>
+    cronetHeaders.map((key, value) {
+      final entry = MapEntry(
+        key!.toDartString(releaseOriginal: true).toLowerCase(),
+        value!.join(','),
+      );
+      value.release();
+      return entry;
+    });
 
 jb.UrlRequestCallbackProxy$UrlRequestCallbackInterface _urlRequestCallbacks(
   BaseRequest request,
@@ -325,8 +326,8 @@ jb.UrlRequestCallbackProxy$UrlRequestCallbackInterface _urlRequestCallbacks(
               ),
               contentLength: contentLength,
               reasonPhrase: responseInfo.getHttpStatusText()!.toDartString(
-                releaseOriginal: true,
-              ),
+                    releaseOriginal: true,
+                  ),
               request: request,
               isRedirect: false,
               headers: responseHeaders,
@@ -339,8 +340,8 @@ jb.UrlRequestCallbackProxy$UrlRequestCallbackInterface _urlRequestCallbacks(
             ..headersCommaValues = responseHeaders
             ..isRedirect = false
             ..reasonPhrase = responseInfo.getHttpStatusText()!.toDartString(
-              releaseOriginal: true,
-            )
+                  releaseOriginal: true,
+                )
             ..startTime = DateTime.now()
             ..statusCode = responseInfo.getHttpStatusCode();
           jByteBuffer = JByteBuffer.allocateDirect(_bufferSize);
@@ -374,8 +375,8 @@ jb.UrlRequestCallbackProxy$UrlRequestCallbackInterface _urlRequestCallbacks(
                 ),
                 contentLength: 0,
                 reasonPhrase: responseInfo.getHttpStatusText()!.toDartString(
-                  releaseOriginal: true,
-                ),
+                      releaseOriginal: true,
+                    ),
                 request: request,
                 isRedirect: true,
                 headers: responseHeaders,
@@ -386,8 +387,8 @@ jb.UrlRequestCallbackProxy$UrlRequestCallbackInterface _urlRequestCallbacks(
               ?..headersCommaValues = responseHeaders
               ..isRedirect = true
               ..reasonPhrase = responseInfo.getHttpStatusText()!.toDartString(
-                releaseOriginal: true,
-              )
+                    releaseOriginal: true,
+                  )
               ..startTime = DateTime.now()
               ..statusCode = responseInfo.getHttpStatusCode();
 
@@ -423,9 +424,9 @@ jb.UrlRequestCallbackProxy$UrlRequestCallbackInterface _urlRequestCallbacks(
           if (responseStreamCancelled) return;
           byteBuffer!.flip();
           final data = jByteBuffer!.asUint8List().sublist(
-            0,
-            byteBuffer.remaining,
-          );
+                0,
+                byteBuffer.remaining,
+              );
           responseStream!.add(data);
           profile?.responseData.bodySink.add(data);
 
@@ -530,7 +531,8 @@ class CronetClient extends BaseClient {
   factory CronetClient.fromCronetEngine(
     CronetEngine engine, {
     bool closeEngine = false,
-  }) => CronetClient._(engine, closeEngine);
+  }) =>
+      CronetClient._(engine, closeEngine);
 
   /// A [CronetClient] configured with a [Future] containing a [CronetEngine].
   ///
@@ -609,16 +611,15 @@ class CronetClient extends BaseClient {
     return await using((arena) async {
       final jUrl = request.url.toString().toJString()..releasedBy(arena);
       final jMethod = request.method.toJString()..releasedBy(arena);
-      final builder =
-          engine._engine.newUrlRequestBuilder(
-              jUrl,
-              jb.UrlRequestCallbackProxy(
-                _urlRequestCallbacks(request, responseCompleter, profile),
-              ),
-              _executor,
-            )!
-            ..releasedBy(arena)
-            ..setHttpMethod(jMethod);
+      final builder = engine._engine.newUrlRequestBuilder(
+        jUrl,
+        jb.UrlRequestCallbackProxy(
+          _urlRequestCallbacks(request, responseCompleter, profile),
+        ),
+        _executor,
+      )!
+        ..releasedBy(arena)
+        ..setHttpMethod(jMethod);
 
       var headers = request.headers;
       if (body.isNotEmpty &&
