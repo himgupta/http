@@ -19,18 +19,22 @@ void main() {
   if (Platform.isAndroid) {
     WidgetsFlutterBinding.ensureInitialized();
     final engine = CronetEngine.build(
-        cacheMode: CacheMode.memory,
-        cacheMaxSize: 2 * 1024 * 1024,
-        userAgent: 'Book Agent');
+      cacheMode: CacheMode.memory,
+      cacheMaxSize: 2 * 1024 * 1024,
+      userAgent: 'Book Agent',
+    );
     httpClient = CronetClient.fromCronetEngine(engine, closeEngine: true);
   } else {
     httpClient = IOClient(HttpClient()..userAgent = 'Book Agent');
   }
 
-  runApp(Provider<Client>(
+  runApp(
+    Provider<Client>(
       create: (_) => httpClient,
       child: const BookSearchApp(),
-      dispose: (_, client) => client.close()));
+      dispose: (_, client) => client.close(),
+    ),
+  );
 }
 
 class BookSearchApp extends StatelessWidget {
@@ -67,11 +71,11 @@ class _HomePageState extends State<HomePage> {
   // The `get` call will automatically use the `client` configured in `main`.
   Future<List<Book>> _findMatchingBooks(String query) async {
     final response = await _client.get(
-      Uri.https(
-        'www.googleapis.com',
-        '/books/v1/volumes',
-        {'q': query, 'maxResults': '20', 'printType': 'books'},
-      ),
+      Uri.https('www.googleapis.com', '/books/v1/volumes', {
+        'q': query,
+        'maxResults': '20',
+        'printType': 'books',
+      }),
     );
 
     final json = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
@@ -143,9 +147,11 @@ class _BookListState extends State<BookList> {
           key: ValueKey(widget.books[index].title),
           child: ListTile(
             leading: Image(
-                image: HttpImageProvider(
-                    widget.books[index].imageUrl.replace(scheme: 'https'),
-                    client: context.read<Client>())),
+              image: HttpImageProvider(
+                widget.books[index].imageUrl.replace(scheme: 'https'),
+                client: context.read<Client>(),
+              ),
+            ),
             title: Text(widget.books[index].title),
             subtitle: Text(widget.books[index].description),
           ),

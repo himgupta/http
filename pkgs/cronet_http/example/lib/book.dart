@@ -19,7 +19,7 @@ class Book {
               case {
                 'title': final String title,
                 'description': final String description,
-                'imageLinks': {'smallThumbnail': final String thumbnail}
+                'imageLinks': {'smallThumbnail': final String thumbnail},
               }) {
             books.add(Book(title, description, Uri.parse(thumbnail)));
           }
